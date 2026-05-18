@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="GLMS.Tests/GLMS.Tests.csproj" />
+  <Project Path="Global Logistics Management System.csproj" />
+</Solution>

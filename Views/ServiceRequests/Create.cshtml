@@ -1,0 +1,80 @@
+@model Global_Logistics_Management_System.Models.ServiceRequest
+@using Global_Logistics_Management_System.Models
+@{
+    ViewData["Title"] = "New Service Request";
+    var rate = (decimal)ViewBag.ExchangeRate;
+}
+
+<h2 class="mb-4">➕ New Service Request</h2>
+
+<div class="row">
+    <div class="col-md-7">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <form asp-action="Create" id="srForm">
+                    <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="ContractId" class="form-label">Contract</label>
+                        <select asp-for="ContractId" class="form-select" asp-items="ViewBag.ContractId">
+                            <option value="">-- Select Active Contract --</option>
+                        </select>
+                        <span asp-validation-for="ContractId" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="CostUsd" class="form-label">Cost (USD)</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input asp-for="CostUsd" type="number" step="0.01" min="0" class="form-control" id="costUsd" />
+                        </div>
+                        <span asp-validation-for="CostUsd" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Estimated Cost (ZAR) <small class="text-muted">– auto calculated</small></label>
+                        <div class="input-group">
+                            <span class="input-group-text">R</span>
+                            <input type="text" class="form-control" id="costZarDisplay" readonly placeholder="Enter USD amount above" />
+                        </div>
+                        <div class="form-text">Live rate: <strong>1 USD = R<span id="rateDisplay">@rate.ToString("F4")</span></strong></div>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Status" class="form-label"></label>
+                        <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<ServiceRequestStatus>()"></select>
+                    </div>
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">Create Request</button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div class="card bg-light shadow-sm">
+            <div class="card-header">💱 Exchange Rate Info</div>
+            <div class="card-body">
+                <p class="mb-1"><strong>Base Currency:</strong> USD</p>
+                <p class="mb-1"><strong>Target Currency:</strong> ZAR (South African Rand)</p>
+                <p class="mb-0"><strong>Current Rate:</strong> 1 USD = R@rate.ToString("F4")</p>
+                <hr />
+                <small class="text-muted">Rate fetched live from open.er-api.com. The saved ZAR amount will reflect the rate at time of submission.</small>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        const rate = @rate;
+        document.getElementById('costUsd').addEventListener('input', function () {
+            const usd = parseFloat(this.value) || 0;
+            const zar = (usd * rate).toFixed(2);
+            document.getElementById('costZarDisplay').value = usd > 0 ? zar : '';
+        });
+    </script>
+}

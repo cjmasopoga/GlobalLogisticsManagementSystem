@@ -1,0 +1,80 @@
+@model Global_Logistics_Management_System.Models.ContractSearchViewModel
+@using Global_Logistics_Management_System.Models
+@{
+    ViewData["Title"] = "Search Contracts";
+}
+
+<h2 class="mb-4">🔍 Search & Filter Contracts</h2>
+
+<div class="card shadow-sm mb-4">
+    <div class="card-body">
+        <form asp-action="Search" method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-3">
+                    <label asp-for="StartDateFrom" class="form-label"></label>
+                    <input asp-for="StartDateFrom" type="date" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="StartDateTo" class="form-label"></label>
+                    <input asp-for="StartDateTo" type="date" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label asp-for="Status" class="form-label">Status</label>
+                    <select asp-for="Status" class="form-select">
+                        <option value="">-- All Statuses --</option>
+                        @foreach (ContractStatus s in Enum.GetValues(typeof(ContractStatus)))
+                        {
+                            <option value="@s" selected="@(Model.Status == s)">@s</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <button type="submit" class="btn btn-primary w-100">🔍 Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (Model.Results.Any())
+{
+    <p class="text-muted">Found <strong>@Model.Results.Count</strong> contract(s).</p>
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>Client</th>
+                    <th>Service Level</th>
+                    <th>Start Date</th>
+                    <th>End Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Results)
+                {
+                    <tr>
+                        <td>@item.Client?.Name</td>
+                        <td>@item.ServiceLevel</td>
+                        <td>@item.StartDate.ToShortDateString()</td>
+                        <td>@item.EndDate.ToShortDateString()</td>
+                        <td>
+                            <span class="badge bg-@(item.Status == ContractStatus.Active ? "success" : item.Status == ContractStatus.Expired ? "danger" : item.Status == ContractStatus.OnHold ? "warning" : "secondary")">
+                                @item.Status
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-controller="Contracts" asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
+                            <a asp-controller="Contracts" asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+else if (Context.Request.Query.Count > 0)
+{
+    <div class="alert alert-info">No contracts matched your search criteria.</div>
+}

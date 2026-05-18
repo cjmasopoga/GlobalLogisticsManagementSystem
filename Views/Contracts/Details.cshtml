@@ -1,0 +1,74 @@
+@model Global_Logistics_Management_System.Models.Contract
+@using Global_Logistics_Management_System.Models
+@{
+    ViewData["Title"] = "Contract Details";
+}
+
+<h2 class="mb-4">📄 Contract Details</h2>
+
+<div class="card shadow-sm col-md-8 mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Client</dt>
+            <dd class="col-sm-9">@Model.Client?.Name</dd>
+            <dt class="col-sm-3">Service Level</dt>
+            <dd class="col-sm-9">@Model.ServiceLevel</dd>
+            <dt class="col-sm-3">Start Date</dt>
+            <dd class="col-sm-9">@Model.StartDate.ToShortDateString()</dd>
+            <dt class="col-sm-3">End Date</dt>
+            <dd class="col-sm-9">@Model.EndDate.ToShortDateString()</dd>
+            <dt class="col-sm-3">Status</dt>
+            <dd class="col-sm-9">
+                <span class="badge bg-@(Model.Status == ContractStatus.Active ? "success" : Model.Status == ContractStatus.Expired ? "danger" : Model.Status == ContractStatus.OnHold ? "warning" : "secondary") fs-6">
+                    @Model.Status
+                </span>
+            </dd>
+            <dt class="col-sm-3">Signed Agreement</dt>
+            <dd class="col-sm-9">
+                @if (!string.IsNullOrEmpty(Model.SignedAgreementPath))
+                {
+                    <a asp-action="Download" asp-route-id="@Model.Id" class="btn btn-sm btn-success">📥 Download PDF</a>
+                }
+                else
+                {
+                    <span class="text-muted">No file uploaded</span>
+                }
+            </dd>
+        </dl>
+        <div class="d-flex gap-2 mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-2">
+    <h4>📦 Service Requests (@Model.ServiceRequests.Count)</h4>
+    @if (Model.Status == ContractStatus.Active || Model.Status == ContractStatus.Draft)
+    {
+        <a asp-controller="ServiceRequests" asp-action="Create" class="btn btn-sm btn-primary">➕ New Request</a>
+    }
+</div>
+<div class="table-responsive">
+    <table class="table table-sm table-striped">
+        <thead class="table-dark">
+            <tr><th>Description</th><th>Cost (USD)</th><th>Cost (ZAR)</th><th>Status</th><th>Created</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var sr in Model.ServiceRequests)
+            {
+                <tr>
+                    <td>@sr.Description</td>
+                    <td>$@sr.CostUsd.ToString("N2")</td>
+                    <td>R@sr.CostZar.ToString("N2")</td>
+                    <td><span class="badge bg-secondary">@sr.Status</span></td>
+                    <td>@sr.CreatedAt.ToShortDateString()</td>
+                </tr>
+            }
+            @if (!Model.ServiceRequests.Any())
+            {
+                <tr><td colspan="5" class="text-muted text-center">No service requests yet.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>

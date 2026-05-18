@@ -1,0 +1,34 @@
+@model Global_Logistics_Management_System.Models.ServiceRequest
+@using Global_Logistics_Management_System.Models
+@{
+    ViewData["Title"] = "Service Request Details";
+}
+
+<h2 class="mb-4">📦 Service Request Details</h2>
+
+<div class="card shadow-sm col-md-8">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">Contract</dt>
+            <dd class="col-sm-8">@Model.Contract?.ServiceLevel</dd>
+            <dt class="col-sm-4">Client</dt>
+            <dd class="col-sm-8">@Model.Contract?.Client?.Name</dd>
+            <dt class="col-sm-4">Description</dt>
+            <dd class="col-sm-8">@Model.Description</dd>
+            <dt class="col-sm-4">Cost (USD)</dt>
+            <dd class="col-sm-8">$@Model.CostUsd.ToString("N2")</dd>
+            <dt class="col-sm-4">Exchange Rate</dt>
+            <dd class="col-sm-8">1 USD = R@Model.ExchangeRateUsed.ToString("F4")</dd>
+            <dt class="col-sm-4">Cost (ZAR)</dt>
+            <dd class="col-sm-8 fw-bold text-success">R@Model.CostZar.ToString("N2")</dd>
+            <dt class="col-sm-4">Status</dt>
+            <dd class="col-sm-8"><span class="badge bg-secondary fs-6">@Model.Status</span></dd>
+            <dt class="col-sm-4">Created At</dt>
+            <dd class="col-sm-8">@Model.CreatedAt.ToString("f")</dd>
+        </dl>
+        <div class="d-flex gap-2 mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>

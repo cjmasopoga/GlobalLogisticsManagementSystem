@@ -1,0 +1,47 @@
+@model Global_Logistics_Management_System.Models.Client
+@{
+    ViewData["Title"] = "Client Details";
+}
+
+<h2 class="mb-4">👤 Client Details</h2>
+
+<div class="card shadow-sm col-md-7 mb-4">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-3">Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+            <dt class="col-sm-3">Contact Details</dt>
+            <dd class="col-sm-9">@Model.ContactDetails</dd>
+            <dt class="col-sm-3">Region</dt>
+            <dd class="col-sm-9">@Model.Region</dd>
+        </dl>
+        <div class="d-flex gap-2">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+            <a asp-action="Index" class="btn btn-secondary">Back</a>
+        </div>
+    </div>
+</div>
+
+<h4>📄 Contracts (@Model.Contracts.Count)</h4>
+<div class="table-responsive">
+    <table class="table table-sm table-striped">
+        <thead class="table-dark">
+            <tr><th>Service Level</th><th>Start</th><th>End</th><th>Status</th></tr>
+        </thead>
+        <tbody>
+            @foreach (var c in Model.Contracts)
+            {
+                <tr>
+                    <td>@c.ServiceLevel</td>
+                    <td>@c.StartDate.ToShortDateString()</td>
+                    <td>@c.EndDate.ToShortDateString()</td>
+                    <td>
+                        <span class="badge bg-@(c.Status == Global_Logistics_Management_System.Models.ContractStatus.Active ? "success" : c.Status == Global_Logistics_Management_System.Models.ContractStatus.Expired ? "danger" : c.Status == Global_Logistics_Management_System.Models.ContractStatus.OnHold ? "warning" : "secondary")">
+                            @c.Status
+                        </span>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

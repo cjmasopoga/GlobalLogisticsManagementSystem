@@ -1,0 +1,35 @@
+## Visual Studio / .NET gitignore
+
+# VS folders
+.vs/
+*.user
+*.suo
+
+# Build output
+bin/
+obj/
+
+# NuGet
+*.nupkg
+packages/
+project.lock.json
+
+# Publish output
+publish/
+**/publish/
+
+# Logs
+*.log
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Uploaded files (simulate file server - exclude from repo)
+wwwroot/uploads/
+
+# EF Core migrations bundle
+efbundle*
+
+# Secrets
+appsettings.Development.json

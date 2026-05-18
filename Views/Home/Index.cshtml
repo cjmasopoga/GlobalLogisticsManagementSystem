@@ -1,0 +1,73 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<h2 class="mb-4">📊 Dashboard</h2>
+
+<div class="row g-4 mb-5">
+    <div class="col-md-3">
+        <div class="card text-white bg-primary shadow">
+            <div class="card-body">
+                <h5 class="card-title">👤 Clients</h5>
+                <p class="card-text display-6">@ViewBag.TotalClients</p>
+                <a asp-controller="Clients" asp-action="Index" class="btn btn-light btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-success shadow">
+            <div class="card-body">
+                <h5 class="card-title">📄 Total Contracts</h5>
+                <p class="card-text display-6">@ViewBag.TotalContracts</p>
+                <a asp-controller="Contracts" asp-action="Index" class="btn btn-light btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-warning shadow">
+            <div class="card-body">
+                <h5 class="card-title">✅ Active Contracts</h5>
+                <p class="card-text display-6">@ViewBag.ActiveContracts</p>
+                <a asp-controller="Contracts" asp-action="Search" class="btn btn-light btn-sm">Search</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-white bg-info shadow">
+            <div class="card-body">
+                <h5 class="card-title">📦 Service Requests</h5>
+                <p class="card-text display-6">@ViewBag.TotalServiceRequests</p>
+                <a asp-controller="ServiceRequests" asp-action="Index" class="btn btn-light btn-sm">View All</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">Quick Actions</div>
+            <div class="card-body d-flex flex-column gap-2">
+                <a asp-controller="Clients" asp-action="Create" class="btn btn-outline-primary">➕ Add Client</a>
+                <a asp-controller="Contracts" asp-action="Create" class="btn btn-outline-success">➕ New Contract</a>
+                <a asp-controller="ServiceRequests" asp-action="Create" class="btn btn-outline-info">➕ New Service Request</a>
+                <a asp-controller="Contracts" asp-action="Search" class="btn btn-outline-secondary">🔍 Search Contracts</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header bg-dark text-white">About GLMS</div>
+            <div class="card-body">
+                <p class="mb-1"><strong>Global Logistics Management System</strong> – TechMove Logistics</p>
+                <ul class="mb-0">
+                    <li>Centralised contract repository with SLA tracking</li>
+                    <li>Automated contract status workflow (Draft → Active → Expired / On Hold)</li>
+                    <li>Service request processing linked to valid, active contracts</li>
+                    <li>Real-time USD → ZAR currency conversion via external API</li>
+                    <li>PDF signed agreement upload &amp; download</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
