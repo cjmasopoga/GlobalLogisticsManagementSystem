@@ -197,6 +197,14 @@ namespace Global_Logistics_Management_System.Services
             return (false, body);
         }
 
+        public async Task<bool> PatchServiceRequestStatusAsync(int id, string status)
+        {
+            AttachToken();
+            var resp = await _http.PatchAsync($"api/servicerequests/{id}/status",
+                new StringContent(JsonSerializer.Serialize(new { Status = status }), Encoding.UTF8, "application/json"));
+            return resp.IsSuccessStatusCode;
+        }
+
         public async Task<bool> DeleteServiceRequestAsync(int id)
         {
             AttachToken();

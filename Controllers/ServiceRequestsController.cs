@@ -25,7 +25,7 @@ namespace Global_Logistics_Management_System.Controllers
         {
             var contracts = await _api.GetContractsAsync();
             var active = contracts.Where(c => c.Status is "Active" or "Draft").ToList();
-            ViewData["ContractId"] = new SelectList(
+            ViewBag.Contracts = new SelectList(
                 active.Select(c => new { c.Id, Display = $"{c.ClientName} - {c.ServiceLevel} ({c.Status})" }),
                 "Id", "Display");
             ViewBag.ExchangeRate = await _api.GetExchangeRateAsync();
@@ -39,7 +39,7 @@ namespace Global_Logistics_Management_System.Controllers
             {
                 var contracts = await _api.GetContractsAsync();
                 var active = contracts.Where(c => c.Status is "Active" or "Draft").ToList();
-                ViewData["ContractId"] = new SelectList(
+                ViewBag.Contracts = new SelectList(
                     active.Select(c => new { c.Id, Display = $"{c.ClientName} - {c.ServiceLevel} ({c.Status})" }),
                     "Id", "Display", dto.ContractId);
                 ViewBag.ExchangeRate = await _api.GetExchangeRateAsync();
@@ -52,7 +52,7 @@ namespace Global_Logistics_Management_System.Controllers
                 ModelState.AddModelError(string.Empty, error ?? "Failed to create service request.");
                 var contracts = await _api.GetContractsAsync();
                 var active = contracts.Where(c => c.Status is "Active" or "Draft").ToList();
-                ViewData["ContractId"] = new SelectList(
+                ViewBag.Contracts = new SelectList(
                     active.Select(c => new { c.Id, Display = $"{c.ClientName} - {c.ServiceLevel} ({c.Status})" }),
                     "Id", "Display", dto.ContractId);
                 ViewBag.ExchangeRate = await _api.GetExchangeRateAsync();
@@ -75,6 +75,35 @@ namespace Global_Logistics_Management_System.Controllers
         {
             await _api.DeleteServiceRequestAsync(id);
             TempData["Success"] = "Service request deleted.";
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Edit(int id)
+        {
+            var sr = await _api.GetServiceRequestAsync(id);
+            if (sr is null) return NotFound();
+            var contracts = await _api.GetContractsAsync();
+            ViewBag.Contracts = new SelectList(
+                contracts.Select(c => new { c.Id, Display = $"{c.ClientName} - {c.ServiceLevel} ({c.Status})" }),
+                "Id", "Display", sr.ContractId);
+            ViewBag.ServiceRequestId = id;
+            return View(new CreateServiceRequestDto(sr.ContractId, sr.Description, sr.CostUsd, sr.Status));
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(int id, CreateServiceRequestDto dto)
+        {
+            if (!ModelState.IsValid)
+            {
+                var contracts = await _api.GetContractsAsync();
+                ViewBag.Contracts = new SelectList(
+                    contracts.Select(c => new { c.Id, Display = $"{c.ClientName} - {c.ServiceLevel} ({c.Status})" }),
+                    "Id", "Display", dto.ContractId);
+                ViewBag.ServiceRequestId = id;
+                return View(dto);
+            }
+            await _api.PatchServiceRequestStatusAsync(id, dto.Status);
+            TempData["Success"] = "Service request updated.";
             return RedirectToAction(nameof(Index));
         }
 
