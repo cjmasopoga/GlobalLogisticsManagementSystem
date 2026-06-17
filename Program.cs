@@ -2,9 +2,12 @@ using Global_Logistics_Management_System.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Load Docker-specific config when running in a container
-builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true,
-    reloadOnChange: false);
+// Load Docker-specific config only when running inside a container
+if (builder.Environment.IsEnvironment("Docker"))
+{
+    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true,
+        reloadOnChange: false);
+}
 
 builder.Services.AddControllersWithViews();
 
