@@ -2,13 +2,8 @@ using Global_Logistics_Management_System.Filters;
 using Global_Logistics_Management_System.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-
-// Load Docker-specific config only when running inside a container
-if (builder.Environment.IsEnvironment("Docker"))
-{
-    builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true,
-        reloadOnChange: false);
-}
+// ASP.NET Core automatically loads appsettings.{Environment}.json,
+// so appsettings.Docker.json is picked up when ASPNETCORE_ENVIRONMENT=Docker.
 
 builder.Services.AddControllersWithViews(options =>
 {
