@@ -1,5 +1,4 @@
-@model Global_Logistics_Management_System.Models.Contract
-@using Global_Logistics_Management_System.Models
+@model Global_Logistics_Management_System.Models.Api.ContractDto
 @{
     ViewData["Title"] = "Delete Contract";
 }
@@ -10,15 +9,15 @@
 <div class="card shadow-sm col-md-6">
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-4">Client</dt><dd class="col-sm-8">@Model.Client?.Name</dd>
+            <dt class="col-sm-4">Client</dt><dd class="col-sm-8">@Model.ClientName</dd>
             <dt class="col-sm-4">Service Level</dt><dd class="col-sm-8">@Model.ServiceLevel</dd>
             <dt class="col-sm-4">Status</dt>
             <dd class="col-sm-8">
-                <span class="badge bg-@(Model.Status == ContractStatus.Active ? "success" : Model.Status == ContractStatus.Expired ? "danger" : "secondary")">@Model.Status</span>
+                <span class="badge bg-@(Model.Status == "Active" ? "success" : Model.Status == "Expired" ? "danger" : "secondary")">@Model.Status</span>
             </dd>
         </dl>
         <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" name="id" value="@Model.Id" />
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger">Yes, Delete</button>
                 <a asp-action="Index" class="btn btn-secondary">Cancel</a>

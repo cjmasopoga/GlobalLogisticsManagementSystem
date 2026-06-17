@@ -1,4 +1,4 @@
-@model IEnumerable<Global_Logistics_Management_System.Models.Client>
+@model IEnumerable<Global_Logistics_Management_System.Models.Api.ClientDto>
 @{
     ViewData["Title"] = "Clients";
 }
@@ -27,7 +27,7 @@
                         <td>@item.Name</td>
                         <td>@item.ContactDetails</td>
                         <td>@item.Region</td>
-                        <td>@item.Contracts.Count</td>
+                        <td>@item.ContractCount</td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
                             <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>

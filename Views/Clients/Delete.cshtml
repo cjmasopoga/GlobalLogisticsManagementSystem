@@ -1,4 +1,4 @@
-@model Global_Logistics_Management_System.Models.Client
+@model Global_Logistics_Management_System.Models.Api.ClientDto
 @{
     ViewData["Title"] = "Delete Client";
 }
@@ -13,7 +13,7 @@
             <dt class="col-sm-4">Region</dt><dd class="col-sm-8">@Model.Region</dd>
         </dl>
         <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" name="id" value="@Model.Id" />
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger">Yes, Delete</button>
                 <a asp-action="Index" class="btn btn-secondary">Cancel</a>

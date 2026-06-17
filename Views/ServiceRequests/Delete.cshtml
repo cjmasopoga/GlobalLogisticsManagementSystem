@@ -1,4 +1,4 @@
-@model Global_Logistics_Management_System.Models.ServiceRequest
+﻿@model Global_Logistics_Management_System.Models.Api.ServiceRequestDto
 @{
     ViewData["Title"] = "Delete Service Request";
 }
@@ -9,14 +9,14 @@
 <div class="card shadow-sm col-md-6">
     <div class="card-body">
         <dl class="row">
-            <dt class="col-sm-4">Contract</dt><dd class="col-sm-8">@Model.Contract?.ServiceLevel</dd>
-            <dt class="col-sm-4">Client</dt><dd class="col-sm-8">@Model.Contract?.Client?.Name</dd>
+            <dt class="col-sm-4">Contract</dt><dd class="col-sm-8">@Model.ContractServiceLevel</dd>
+            <dt class="col-sm-4">Client</dt><dd class="col-sm-8">@Model.ClientName</dd>
             <dt class="col-sm-4">Description</dt><dd class="col-sm-8">@Model.Description</dd>
             <dt class="col-sm-4">Cost (USD)</dt><dd class="col-sm-8">$@Model.CostUsd.ToString("N2")</dd>
             <dt class="col-sm-4">Cost (ZAR)</dt><dd class="col-sm-8">R@Model.CostZar.ToString("N2")</dd>
         </dl>
         <form asp-action="Delete">
-            <input type="hidden" asp-for="Id" />
+            <input type="hidden" name="id" value="@Model.Id" />
             <div class="d-flex gap-2">
                 <button type="submit" class="btn btn-danger">Yes, Delete</button>
                 <a asp-action="Index" class="btn btn-secondary">Cancel</a>

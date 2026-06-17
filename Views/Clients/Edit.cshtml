@@ -1,4 +1,4 @@
-@model Global_Logistics_Management_System.Models.Client
+@model Global_Logistics_Management_System.Models.Api.CreateClientDto
 @{
     ViewData["Title"] = "Edit Client";
 }
@@ -9,7 +9,6 @@
     <div class="card-body">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
-            <input type="hidden" asp-for="Id" />
             <div class="mb-3">
                 <label asp-for="Name" class="form-label"></label>
                 <input asp-for="Name" class="form-control" />

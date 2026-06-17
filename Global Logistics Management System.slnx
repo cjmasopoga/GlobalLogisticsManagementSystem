@@ -1,4 +1,6 @@
 <Solution>
+  <Project Path="GLMS.Shared/GLMS.Shared.csproj" />
+  <Project Path="GLMS.API/GLMS.API.csproj" />
   <Project Path="GLMS.Tests/GLMS.Tests.csproj" />
   <Project Path="Global Logistics Management System.csproj" />
 </Solution>

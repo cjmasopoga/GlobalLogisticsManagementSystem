@@ -1,4 +1,4 @@
-@model IEnumerable<Global_Logistics_Management_System.Models.ServiceRequest>
+﻿@model IEnumerable<Global_Logistics_Management_System.Models.Api.ServiceRequestDto>
 @{
     ViewData["Title"] = "Service Requests";
 }
@@ -27,8 +27,8 @@
                 @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Contract?.ServiceLevel</td>
-                        <td>@item.Contract?.Client?.Name</td>
+                        <td>@item.ContractServiceLevel</td>
+                        <td>@item.ClientName</td>
                         <td>@(item.Description.Length > 60 ? item.Description[..60] + "…" : item.Description)</td>
                         <td>$@item.CostUsd.ToString("N2")</td>
                         <td>R@item.CostZar.ToString("N2")</td>
@@ -36,7 +36,6 @@
                         <td>@item.CreatedAt.ToShortDateString()</td>
                         <td>
                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-outline-info">Details</a>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-warning">Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-outline-danger">Delete</a>
                         </td>
                     </tr>

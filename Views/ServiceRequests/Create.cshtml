@@ -1,5 +1,4 @@
-@model Global_Logistics_Management_System.Models.ServiceRequest
-@using Global_Logistics_Management_System.Models
+﻿@model Global_Logistics_Management_System.Models.Api.CreateServiceRequestDto
 @{
     ViewData["Title"] = "New Service Request";
     var rate = (decimal)ViewBag.ExchangeRate;
@@ -15,15 +14,13 @@
                     <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
                     <div class="mb-3">
                         <label asp-for="ContractId" class="form-label">Contract</label>
-                        <select asp-for="ContractId" class="form-select" asp-items="ViewBag.ContractId">
+                        <select asp-for="ContractId" class="form-select" asp-items="ViewBag.Contracts">
                             <option value="">-- Select Active Contract --</option>
                         </select>
-                        <span asp-validation-for="ContractId" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="Description" class="form-label"></label>
+                        <label asp-for="Description" class="form-label">Description</label>
                         <textarea asp-for="Description" class="form-control" rows="3"></textarea>
-                        <span asp-validation-for="Description" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label asp-for="CostUsd" class="form-label">Cost (USD)</label>
@@ -31,7 +28,6 @@
                             <span class="input-group-text">$</span>
                             <input asp-for="CostUsd" type="number" step="0.01" min="0" class="form-control" id="costUsd" />
                         </div>
-                        <span asp-validation-for="CostUsd" class="text-danger"></span>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Estimated Cost (ZAR) <small class="text-muted">– auto calculated</small></label>
@@ -42,8 +38,13 @@
                         <div class="form-text">Live rate: <strong>1 USD = R<span id="rateDisplay">@rate.ToString("F4")</span></strong></div>
                     </div>
                     <div class="mb-3">
-                        <label asp-for="Status" class="form-label"></label>
-                        <select asp-for="Status" class="form-select" asp-items="Html.GetEnumSelectList<ServiceRequestStatus>()"></select>
+                        <label asp-for="Status" class="form-label">Status</label>
+                        <select asp-for="Status" class="form-select">
+                            <option value="Pending">Pending</option>
+                            <option value="InProgress">In Progress</option>
+                            <option value="Completed">Completed</option>
+                            <option value="Cancelled">Cancelled</option>
+                        </select>
                     </div>
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">Create Request</button>
@@ -71,10 +72,10 @@
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
     <script>
         const rate = @rate;
-        document.getElementById('costUsd').addEventListener('input', function () {
+        document.getElementById("costUsd").addEventListener("input", function () {
             const usd = parseFloat(this.value) || 0;
             const zar = (usd * rate).toFixed(2);
-            document.getElementById('costZarDisplay').value = usd > 0 ? zar : '';
+            document.getElementById("costZarDisplay").value = usd > 0 ? zar : "";
         });
     </script>
 }

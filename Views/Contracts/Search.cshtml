@@ -1,7 +1,9 @@
-@model Global_Logistics_Management_System.Models.ContractSearchViewModel
-@using Global_Logistics_Management_System.Models
+﻿@model IEnumerable<Global_Logistics_Management_System.Models.Api.ContractDto>
 @{
     ViewData["Title"] = "Search Contracts";
+    var status = ViewBag.Status as string;
+    var from = ViewBag.StartDateFrom as DateTime?;
+    var to = ViewBag.StartDateTo as DateTime?;
 }
 
 <h2 class="mb-4">🔍 Search & Filter Contracts</h2>
@@ -11,21 +13,21 @@
         <form asp-action="Search" method="get">
             <div class="row g-3 align-items-end">
                 <div class="col-md-3">
-                    <label asp-for="StartDateFrom" class="form-label"></label>
-                    <input asp-for="StartDateFrom" type="date" class="form-control" />
+                    <label class="form-label">Start Date From</label>
+                    <input type="date" name="startDateFrom" value="@(from?.ToString("yyyy-MM-dd"))" class="form-control" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="StartDateTo" class="form-label"></label>
-                    <input asp-for="StartDateTo" type="date" class="form-control" />
+                    <label class="form-label">Start Date To</label>
+                    <input type="date" name="startDateTo" value="@(to?.ToString("yyyy-MM-dd"))" class="form-control" />
                 </div>
                 <div class="col-md-3">
-                    <label asp-for="Status" class="form-label">Status</label>
-                    <select asp-for="Status" class="form-select">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
                         <option value="">-- All Statuses --</option>
-                        @foreach (ContractStatus s in Enum.GetValues(typeof(ContractStatus)))
-                        {
-                            <option value="@s" selected="@(Model.Status == s)">@s</option>
-                        }
+                        <option value="Draft" selected="@(status == "Draft")">Draft</option>
+                        <option value="Active" selected="@(status == "Active")">Active</option>
+                        <option value="OnHold" selected="@(status == "OnHold")">On Hold</option>
+                        <option value="Expired" selected="@(status == "Expired")">Expired</option>
                     </select>
                 </div>
                 <div class="col-md-3">
@@ -36,9 +38,9 @@
     </div>
 </div>
 
-@if (Model.Results.Any())
+@if (Model.Any())
 {
-    <p class="text-muted">Found <strong>@Model.Results.Count</strong> contract(s).</p>
+    <p class="text-muted">Found <strong>@Model.Count()</strong> contract(s).</p>
     <div class="table-responsive">
         <table class="table table-hover">
             <thead class="table-dark">
@@ -52,15 +54,15 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in Model.Results)
+                @foreach (var item in Model)
                 {
                     <tr>
-                        <td>@item.Client?.Name</td>
+                        <td>@item.ClientName</td>
                         <td>@item.ServiceLevel</td>
                         <td>@item.StartDate.ToShortDateString()</td>
                         <td>@item.EndDate.ToShortDateString()</td>
                         <td>
-                            <span class="badge bg-@(item.Status == ContractStatus.Active ? "success" : item.Status == ContractStatus.Expired ? "danger" : item.Status == ContractStatus.OnHold ? "warning" : "secondary")">
+                            <span class="badge bg-@(item.Status == "Active" ? "success" : item.Status == "Expired" ? "danger" : item.Status == "OnHold" ? "warning" : "secondary")">
                                 @item.Status
                             </span>
                         </td>
@@ -74,7 +76,7 @@
         </table>
     </div>
 }
-else if (Context.Request.Query.Count > 0)
+else
 {
     <div class="alert alert-info">No contracts matched your search criteria.</div>
 }

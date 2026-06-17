@@ -1,10 +1,7 @@
-﻿using Global_Logistics_Management_System.Models;
-using Global_Logistics_Management_System.Services;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Moq;
 
 namespace GLMS.Tests;
-
 // ---------------------------------------------------------------------------
 // 1. Currency Calculation Tests
 // ---------------------------------------------------------------------------
@@ -200,6 +197,31 @@ internal static class WorkflowRules
         return contract.Status != ContractStatus.Expired
             && contract.Status != ContractStatus.OnHold;
     }
+}
+
+// ---------------------------------------------------------------------------
+// Local domain stubs – the MVC project no longer exposes these EF entities,
+// so tests that validate pure business logic define minimal stand-ins here.
+// ---------------------------------------------------------------------------
+public enum ContractStatus { Draft, Active, OnHold, Expired }
+public enum ServiceRequestStatus { Pending, InProgress, Completed, Cancelled }
+
+internal class Contract
+{
+    public ContractStatus Status { get; set; } = ContractStatus.Draft;
+    public List<ServiceRequest> ServiceRequests { get; set; } = new();
+    public Client Client { get; set; } = new();
+}
+
+internal class ServiceRequest
+{
+    public ServiceRequestStatus Status { get; set; } = ServiceRequestStatus.Pending;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
+internal class Client
+{
+    public List<Contract> Contracts { get; set; } = new();
 }
 
 // ---------------------------------------------------------------------------

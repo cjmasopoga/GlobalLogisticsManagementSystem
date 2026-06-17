@@ -1,39 +1,35 @@
-using Global_Logistics_Management_System.Data;
 using Global_Logistics_Management_System.Models;
+using Global_Logistics_Management_System.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
 namespace Global_Logistics_Management_System.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApiService _api;
 
-        public HomeController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public HomeController(ApiService api) => _api = api;
 
         public async Task<IActionResult> Index()
         {
-            ViewBag.TotalClients = await _context.Clients.CountAsync();
-            ViewBag.TotalContracts = await _context.Contracts.CountAsync();
-            ViewBag.ActiveContracts = await _context.Contracts.CountAsync(c => c.Status == ContractStatus.Active);
-            ViewBag.TotalServiceRequests = await _context.ServiceRequests.CountAsync();
+            var clients = await _api.GetClientsAsync();
+            var contracts = await _api.GetContractsAsync();
+            var requests = await _api.GetServiceRequestsAsync();
+
+            ViewBag.TotalClients = clients.Count;
+            ViewBag.TotalContracts = contracts.Count;
+            ViewBag.ActiveContracts = contracts.Count(c => c.Status == "Active");
+            ViewBag.TotalServiceRequests = requests.Count;
             return View();
         }
 
-        public IActionResult Privacy()
-        {
-            return View();
-        }
+        public IActionResult Privacy() => View();
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        }
+        public IActionResult Error() =>
+            View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
     }
 }
+
 

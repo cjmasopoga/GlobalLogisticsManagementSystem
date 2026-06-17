@@ -1,28 +1,31 @@
-using Microsoft.EntityFrameworkCore;
-using Global_Logistics_Management_System.Data;
 using Global_Logistics_Management_System.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Load Docker-specific config when running in a container
+builder.Configuration.AddJsonFile("appsettings.Docker.json", optional: true,
+    reloadOnChange: false);
+
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+// Session (stores JWT token)
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(o =>
+{
+    o.IdleTimeout = TimeSpan.FromHours(8);
+    o.Cookie.HttpOnly = true;
+    o.Cookie.IsEssential = true;
+});
+builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddHttpClient<ICurrencyService, CurrencyService>();
-builder.Services.AddScoped<IFileService, FileService>();
+// Typed HttpClient pointing at the API
+builder.Services.AddHttpClient<ApiService>(client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["ApiSettings:BaseUrl"]!);
+});
 
 var app = builder.Build();
 
-// Apply migrations at startup
-using (var scope = app.Services.CreateScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    db.Database.Migrate();
-}
-
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -32,7 +35,7 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
-
+app.UseSession();
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -43,3 +46,4 @@ app.MapControllerRoute(
     .WithStaticAssets();
 
 app.Run();
+

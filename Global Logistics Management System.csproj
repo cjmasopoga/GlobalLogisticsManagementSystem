@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
@@ -12,6 +12,30 @@
     <Content Remove="GLMS.Tests\**" />
     <EmbeddedResource Remove="GLMS.Tests\**" />
     <None Remove="GLMS.Tests\**" />
+    <Compile Remove="GLMS.API\**" />
+    <Content Remove="GLMS.API\**" />
+    <EmbeddedResource Remove="GLMS.API\**" />
+    <None Remove="GLMS.API\**" />
+    <Compile Remove="GLMS.Shared\**" />
+    <Content Remove="GLMS.Shared\**" />
+    <EmbeddedResource Remove="GLMS.Shared\**" />
+    <None Remove="GLMS.Shared\**" />
+    <!-- Legacy EF models replaced by API DTOs -->
+    <Compile Remove="Models\Client.cs" />
+    <Compile Remove="Models\Contract.cs" />
+    <Compile Remove="Models\ServiceRequest.cs" />
+    <Compile Remove="Models\ContractSearchViewModel.cs" />
+    <Compile Remove="Data\ApplicationDbContext.cs" />
+    <Compile Remove="Services\CurrencyService.cs" />
+    <Compile Remove="Services\ICurrencyService.cs" />
+    <Compile Remove="Services\FileService.cs" />
+    <Compile Remove="Services\IFileService.cs" />
+    <Compile Remove="Migrations\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="GLMS.API\GLMS.API.csproj" />
+    <None Include="GLMS.Shared\GLMS.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

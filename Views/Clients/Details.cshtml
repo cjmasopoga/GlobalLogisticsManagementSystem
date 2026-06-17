@@ -1,4 +1,4 @@
-@model Global_Logistics_Management_System.Models.Client
+@model Global_Logistics_Management_System.Models.Api.ClientDto
 @{
     ViewData["Title"] = "Client Details";
 }
@@ -22,26 +22,9 @@
     </div>
 </div>
 
-<h4>📄 Contracts (@Model.Contracts.Count)</h4>
-<div class="table-responsive">
-    <table class="table table-sm table-striped">
-        <thead class="table-dark">
-            <tr><th>Service Level</th><th>Start</th><th>End</th><th>Status</th></tr>
-        </thead>
-        <tbody>
-            @foreach (var c in Model.Contracts)
-            {
-                <tr>
-                    <td>@c.ServiceLevel</td>
-                    <td>@c.StartDate.ToShortDateString()</td>
-                    <td>@c.EndDate.ToShortDateString()</td>
-                    <td>
-                        <span class="badge bg-@(c.Status == Global_Logistics_Management_System.Models.ContractStatus.Active ? "success" : c.Status == Global_Logistics_Management_System.Models.ContractStatus.Expired ? "danger" : c.Status == Global_Logistics_Management_System.Models.ContractStatus.OnHold ? "warning" : "secondary")">
-                            @c.Status
-                        </span>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
+<h4>📄 Contracts (@Model.ContractCount)</h4>
+<div class="card shadow-sm">
+    <div class="card-body text-muted">
+        <a asp-controller="Contracts" asp-action="Search" class="btn btn-sm btn-outline-primary">View contracts for this client</a>
+    </div>
 </div>
