@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>GLMS – Technical Presentation</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/theme/night.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" />
+  <style>
+    :root { --accent: #4fc3f7; --accent2: #81c784; --warn: #ffb74d; }
+    .reveal { font-family: 'Segoe UI', sans-serif; }
+    .reveal h1, .reveal h2, .reveal h3 { color: var(--accent); text-transform: none; }
+    .reveal h1 { font-size: 2em; }
+    .reveal h2 { font-size: 1.5em; border-bottom: 2px solid var(--accent); padding-bottom: .2em; }
+    .reveal h3 { font-size: 1.1em; color: #81c784; }
+    .reveal table { font-size: .78em; width: 100%; }
+    .reveal table th { background: rgba(79,195,247,.25); color: var(--accent); }
+    .reveal table td, .reveal table th { border: 1px solid rgba(255,255,255,.15); padding: .35em .6em; }
+    .reveal table tr:nth-child(even) td { background: rgba(255,255,255,.04); }
+    .badge { display:inline-block; padding:.15em .5em; border-radius:4px; font-size:.75em; font-weight:700; }
+    .badge-blue  { background:rgba(79,195,247,.2);  color:var(--accent); }
+    .badge-green { background:rgba(129,199,132,.2); color:var(--accent2); }
+    .badge-warn  { background:rgba(255,183,77,.2);  color:var(--warn); }
+    .two-col { display:grid; grid-template-columns:1fr 1fr; gap:1em; text-align:left; }
+    .card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.12);
+            border-radius:8px; padding:.8em 1em; font-size:.78em; }
+    .card h3 { margin:0 0 .4em; font-size:.95em; }
+    .check { color: var(--accent2); }
+    .reveal pre { font-size:.65em; }
+    .reveal ul { font-size:.85em; }
+    .reveal li { margin-bottom:.3em; }
+    .pipeline { display:flex; flex-direction:column; align-items:center; gap:.3em; font-size:.72em; }
+    .pipeline-step { background:rgba(79,195,247,.15); border:1px solid var(--accent);
+                     border-radius:6px; padding:.3em 1.5em; width:320px; text-align:center; }
+    .pipeline-arrow { color: var(--accent); font-size:1.1em; }
+    .arch-box { border:1px solid rgba(255,255,255,.25); border-radius:8px; padding:.5em .8em;
+                background:rgba(255,255,255,.05); font-size:.75em; text-align:center; }
+    .arch-arrow { color: var(--accent); font-size:1.4em; margin:0 .4em; }
+    .title-logo { font-size:3.5em; margin-bottom:.2em; }
+    .subtitle-tag { background:rgba(79,195,247,.15); border:1px solid var(--accent);
+                    border-radius:20px; padding:.2em 1em; display:inline-block; font-size:.7em; margin:.2em; }
+    .highlight-box { background:rgba(79,195,247,.1); border-left:4px solid var(--accent);
+                     padding:.5em .8em; border-radius:0 6px 6px 0; margin:.4em 0; font-size:.8em; }
+    .warn-box { background:rgba(255,183,77,.1); border-left:4px solid var(--warn);
+                padding:.5em .8em; border-radius:0 6px 6px 0; margin:.4em 0; font-size:.8em; }
+    .green-box { background:rgba(129,199,132,.1); border-left:4px solid var(--accent2);
+                 padding:.5em .8em; border-radius:0 6px 6px 0; margin:.4em 0; font-size:.8em; }
+  </style>
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 1 – TITLE -->
+<section>
+  <div class="title-logo">🚚</div>
+  <h1>Global Logistics Management System</h1>
+  <p style="color:#aaa; font-size:.9em;">
+    Service-Oriented Architecture &bull; Cloud-Native Containerisation &bull; Automated Testing
+  </p>
+  <br/>
+  <div>
+    <span class="subtitle-tag">.NET 10</span>
+    <span class="subtitle-tag">ASP.NET Core</span>
+    <span class="subtitle-tag">Docker</span>
+    <span class="subtitle-tag">SQL Server 2022</span>
+    <span class="subtitle-tag">xUnit · 44 Tests</span>
+  </div>
+  <br/>
+  <table style="font-size:.72em; margin:auto; width:auto;">
+    <tr><td><b>Student</b></td><td>Jan Masopoga</td></tr>
+    <tr><td><b>GitHub</b></td><td><a href="https://github.com/cjmasopoga/GlobalLogisticsManagementSystem" style="color:var(--accent)">cjmasopoga/GlobalLogisticsManagementSystem</a></td></tr>
+    <tr><td><b>Environment</b></td><td>Visual Studio 2026 · Docker Desktop</td></tr>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 2 – OVERVIEW -->
+<section>
+  <h2>📋 Project Overview</h2>
+  <p style="font-size:.82em;">GLMS is a web platform for <b>TechMove Logistics</b> to manage clients, shipping contracts, and service requests internationally — including live <b>USD → ZAR</b> currency conversion.</p>
+  <br/>
+  <table>
+    <thead><tr><th>Phase</th><th>What Was Built</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><b>Part 1</b><br/><small>Prototype</small></td>
+        <td>Monolithic ASP.NET Core MVC app with direct EF Core database access and unit tests</td>
+        <td><span class="badge badge-green">✅ Complete</span></td>
+      </tr>
+      <tr>
+        <td><b>Part 2</b><br/><small>SOA Refactor</small></td>
+        <td>Split into Web API + MVC client, Docker containerisation, API integration tests</td>
+        <td><span class="badge badge-green">✅ Complete</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <br/>
+  <div class="highlight-box">
+    This presentation covers <strong>Part 2</strong> — the full SOA, containerisation, and testing implementation.
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 3 – ARCHITECTURE -->
+<section>
+  <h2>🏗️ System Architecture</h2>
+  <p style="font-size:.75em; color:#aaa;">All three services run on a shared Docker bridge network</p>
+  <br/>
+  <div style="display:flex; align-items:center; justify-content:center; gap:.5em; flex-wrap:wrap;">
+    <div class="arch-box" style="border-color:#81c784;">
+      <div style="font-size:1.5em;">🖥️</div>
+      <b>glms-frontend-web</b><br/>
+      <small>ASP.NET Core MVC<br/>Port 5000 (host)</small>
+    </div>
+    <div class="arch-arrow">⟶<br/><small style="font-size:.6em">HTTP/JSON<br/>port 8080</small></div>
+    <div class="arch-box" style="border-color:var(--accent);">
+      <div style="font-size:1.5em;">⚙️</div>
+      <b>glms-backend-api</b><br/>
+      <small>ASP.NET Core Web API<br/>Port 5001 (host)</small>
+    </div>
+    <div class="arch-arrow">⟶<br/><small style="font-size:.6em">EF Core<br/>port 1433</small></div>
+    <div class="arch-box" style="border-color:var(--warn);">
+      <div style="font-size:1.5em;">🗄️</div>
+      <b>sql-server-db</b><br/>
+      <small>MS SQL Server 2022<br/>Port 1433 (host)</small>
+    </div>
+  </div>
+  <br/>
+  <div class="two-col" style="font-size:.75em;">
+    <div class="highlight-box">
+      <b>Separation of Concerns</b><br/>
+      API owns all business logic &amp; DB access.<br/>MVC is a pure presentation layer.
+    </div>
+    <div class="highlight-box">
+      <b>Internal DNS</b><br/>
+      Containers talk by service name, not IP.<br/><code>http://glms-backend-api:8080</code>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 4 – SOLUTION STRUCTURE -->
+<section>
+  <h2>📁 Solution Structure</h2>
+  <div class="two-col">
+    <div>
+      <div class="card">
+        <h3>🖥️ MVC Frontend</h3>
+        <code style="font-size:.8em;">Global Logistics Management System/</code>
+        <ul style="font-size:.78em; margin:.4em 0;">
+          <li>Controllers/ — Presentation only</li>
+          <li>Views/ — Razor (DTO-bound)</li>
+          <li>Services/ApiService.cs</li>
+          <li>Filters/SessionAuthFilter.cs</li>
+          <li>appsettings.Docker.json</li>
+        </ul>
+      </div>
+      <br/>
+      <div class="card">
+        <h3>🧪 Tests</h3>
+        <ul style="font-size:.78em; margin:.4em 0;">
+          <li>UnitTest1.cs — 28 unit tests</li>
+          <li>IntegrationTests.cs — 16 API tests</li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3>⚙️ Backend API</h3>
+        <code style="font-size:.8em;">GLMS.API/</code>
+        <ul style="font-size:.78em; margin:.4em 0;">
+          <li>Controllers/ — Auth, Clients, Contracts, SRs</li>
+          <li>Data/ApiDbContext.cs</li>
+          <li>DTOs/Dtos.cs</li>
+          <li>Services/ — TokenService, CurrencyService</li>
+          <li>Migrations/</li>
+        </ul>
+      </div>
+      <br/>
+      <div class="card">
+        <h3>🐳 Docker</h3>
+        <ul style="font-size:.78em; margin:.4em 0;">
+          <li>Dockerfile.api</li>
+          <li>Dockerfile.web</li>
+          <li>docker-compose.yml</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 5 – BACKEND API -->
+<section>
+  <h2>⚙️ Backend API — GLMS.API</h2>
+  <div class="two-col">
+    <div>
+      <h3>Tech Stack</h3>
+      <table>
+        <tr><th>Component</th><th>Technology</th></tr>
+        <tr><td>Framework</td><td>ASP.NET Core 10 Web API</td></tr>
+        <tr><td>ORM</td><td>EF Core 10 + SQL Server</td></tr>
+        <tr><td>Auth</td><td>JWT Bearer (HMAC-SHA256)</td></tr>
+        <tr><td>Docs</td><td>Swagger / OpenAPI</td></tr>
+        <tr><td>Currency</td><td>Open Exchange Rates API</td></tr>
+      </table>
+    </div>
+    <div>
+      <h3>Key Features</h3>
+      <ul style="font-size:.8em;">
+        <li>All endpoints protected with <code>[Authorize]</code></li>
+        <li>Code-First EF migrations (auto-applied on startup)</li>
+        <li>Live USD→ZAR rate with 18.50 fallback</li>
+        <li>Swagger UI at <code>/swagger</code></li>
+        <li>CORS configured for MVC origin</li>
+        <li>Testing environment guard skips DB migrations</li>
+      </ul>
+      <div class="highlight-box" style="margin-top:.6em;">
+        <b>18 REST endpoints</b> across Auth, Clients, Contracts, and Service Requests
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 6 – API ENDPOINTS -->
+<section>
+  <h2>🔌 API Endpoints</h2>
+  <table style="font-size:.68em;">
+    <thead><tr><th>Method</th><th>Route</th><th>Description</th><th>Auth</th></tr></thead>
+    <tbody>
+      <tr><td><span class="badge badge-warn">POST</span></td><td>/api/auth/login</td><td>Returns JWT token</td><td>—</td></tr>
+      <tr><td><span class="badge badge-blue">GET</span></td><td>/api/clients</td><td>List all clients</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-warn">POST</span></td><td>/api/clients</td><td>Create client</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">PUT</span></td><td>/api/clients/{id}</td><td>Update client</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">DELETE</span></td><td>/api/clients/{id}</td><td>Delete client</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">GET</span></td><td>/api/contracts</td><td>List contracts (filterable)</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-warn">POST</span></td><td>/api/contracts</td><td>Create contract</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">PATCH</span></td><td>/api/contracts/{id}/status</td><td>Update contract status</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">GET</span></td><td>/api/servicerequests</td><td>List service requests</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-warn">POST</span></td><td>/api/servicerequests</td><td>Create service request</td><td>✅</td></tr>
+      <tr><td><span class="badge badge-blue">GET</span></td><td>/api/servicerequests/exchange-rate</td><td>Live USD/ZAR rate</td><td>✅</td></tr>
+    </tbody>
+  </table>
+  <div class="highlight-box" style="margin-top:.6em; font-size:.75em;">
+    <b>Business rule:</b> Service requests can only be created for <code>Draft</code> or <code>Active</code> contracts — <code>OnHold</code>/<code>Expired</code> returns <code>400 Bad Request</code>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 7 – DATA MODEL -->
+<section>
+  <h2>🗃️ Data Model</h2>
+  <div style="display:flex; justify-content:center; gap:1.5em; flex-wrap:wrap; font-size:.78em;">
+    <div class="card" style="min-width:180px;">
+      <h3>👤 Client</h3>
+      <ul style="margin:.3em 0;">
+        <li>Id (PK)</li>
+        <li>Name</li>
+        <li>ContactDetails</li>
+        <li>Region</li>
+        <li style="color:var(--accent);">→ Contracts[ ]</li>
+      </ul>
+    </div>
+    <div style="display:flex; align-items:center; color:var(--accent); font-size:1.5em;">1:N</div>
+    <div class="card" style="min-width:180px;">
+      <h3>📄 Contract</h3>
+      <ul style="margin:.3em 0;">
+        <li>Id (PK)</li>
+        <li>ClientId (FK)</li>
+        <li>StartDate / EndDate</li>
+        <li>Status <small style="color:var(--warn)">(enum)</small></li>
+        <li>ServiceLevel</li>
+        <li style="color:var(--accent);">→ ServiceRequests[ ]</li>
+      </ul>
+    </div>
+    <div style="display:flex; align-items:center; color:var(--accent); font-size:1.5em;">1:N</div>
+    <div class="card" style="min-width:180px;">
+      <h3>📦 ServiceRequest</h3>
+      <ul style="margin:.3em 0;">
+        <li>Id (PK)</li>
+        <li>ContractId (FK)</li>
+        <li>Description</li>
+        <li>CostUsd / CostZar</li>
+        <li>ExchangeRateUsed</li>
+        <li>Status <small style="color:var(--warn)">(enum)</small></li>
+        <li>CreatedAt</li>
+      </ul>
+    </div>
+  </div>
+  <br/>
+  <div class="two-col" style="font-size:.72em;">
+    <div class="card"><b>ContractStatus</b><br/><code>Draft | Active | OnHold | Expired</code></div>
+    <div class="card"><b>ServiceRequestStatus</b><br/><code>Pending | InProgress | Completed | Cancelled</code></div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 8 – FRONTEND REFACTOR -->
+<section>
+  <h2>🖥️ Frontend — Monolith → Thin Client</h2>
+  <div class="two-col">
+    <div>
+      <div class="warn-box">
+        <b>❌ Before (Monolith)</b>
+        <pre><code class="language-csharp" style="font-size:.7em;">// Controller queried DB directly
+var clients = await _context.Clients
+    .ToListAsync();</code></pre>
+        MVC app knew about EF, database schema, SQL Server
+      </div>
+    </div>
+    <div>
+      <div class="green-box">
+        <b>✅ After (Thin Client)</b>
+        <pre><code class="language-csharp" style="font-size:.7em;">// Controller calls the API
+var clients = await _api
+    .GetClientsAsync();</code></pre>
+        MVC app only knows about DTOs and HTTP
+      </div>
+    </div>
+  </div>
+  <br/>
+  <div class="highlight-box" style="font-size:.78em;">
+    <b>ApiService</b> is a typed <code>HttpClient</code> wrapper that:
+    <ul style="margin:.3em 0 0;">
+      <li>Attaches the JWT token from session to every request</li>
+      <li>Serialises/deserialises JSON with <code>System.Text.Json</code></li>
+      <li>Provides a strongly-typed async method for every API endpoint</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 9 – AUTH -->
+<section>
+  <h2>🔐 Authentication &amp; Security</h2>
+  <div class="two-col">
+    <div>
+      <h3>JWT Token Flow</h3>
+      <ol style="font-size:.75em; line-height:1.8;">
+        <li>User submits login form (username + password)</li>
+        <li>MVC POSTs to <code>POST /api/auth/login</code></li>
+        <li>API validates credentials → returns JWT</li>
+        <li>MVC stores token in <b>server-side session</b></li>
+        <li>Every API call attaches <code>Authorization: Bearer &lt;token&gt;</code></li>
+        <li><code>SessionAuthFilter</code> redirects to login if no token found</li>
+      </ol>
+      <div class="highlight-box" style="margin-top:.5em; font-size:.75em;">
+        Logout clears the entire session — token is immediately invalidated on the client side
+      </div>
+    </div>
+    <div>
+      <h3>Token Settings</h3>
+      <table>
+        <tr><th>Setting</th><th>Value</th></tr>
+        <tr><td>Algorithm</td><td>HMAC-SHA256</td></tr>
+        <tr><td>Expiry</td><td>8 hours</td></tr>
+        <tr><td>Issuer</td><td><code>GLMS.API</code></td></tr>
+        <tr><td>Audience</td><td><code>GLMS.Web</code></td></tr>
+        <tr><td>Key</td><td>256-bit symmetric</td></tr>
+      </table>
+      <br/>
+      <div class="card" style="font-size:.75em;">
+        <b>SessionAuthFilter</b> — global <code>IActionFilter</code><br/>
+        Checks for <code>JwtToken</code> in session on every request.<br/>
+        Passes the Account controller (Login/Logout) through without a token.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 10 – DOCKER -->
+<section>
+  <h2>🐳 Docker Containerisation</h2>
+  <div class="two-col">
+    <div>
+      <h3>docker-compose.yml — 3 Services</h3>
+      <table style="font-size:.72em;">
+        <thead><tr><th>Container</th><th>Port</th><th>Depends On</th></tr></thead>
+        <tbody>
+          <tr><td>🗄️ sql-server-db</td><td>1433:1433</td><td>—</td></tr>
+          <tr><td>⚙️ glms-backend-api</td><td>5001:8080</td><td>sql-server-db ✅ healthy</td></tr>
+          <tr><td>🖥️ glms-frontend-web</td><td>5000:8080</td><td>glms-backend-api started</td></tr>
+        </tbody>
+      </table>
+      <br/>
+      <div class="highlight-box" style="font-size:.75em;">
+        <b>Health check</b> on SQL Server — API waits until <code>SELECT 1</code> succeeds before starting
+      </div>
+    </div>
+    <div>
+      <h3>Multi-Stage Dockerfiles</h3>
+      <div class="card" style="font-size:.75em;">
+        <b>Stage 1: SDK image (~800 MB)</b><br/>
+        <code>dotnet restore → dotnet publish</code><br/><br/>
+        <b>Stage 2: ASP.NET runtime only (~200 MB)</b><br/>
+        <code>COPY --from=build /app/publish .</code>
+      </div>
+      <br/>
+      <h3>Environment Config Switching</h3>
+      <table style="font-size:.7em;">
+        <tr><th>Env</th><th>API Base URL</th></tr>
+        <tr><td>Development (F5)</td><td>localhost:5001</td></tr>
+        <tr><td>Docker (container)</td><td>glms-backend-api:8080</td></tr>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 11 – TESTING -->
+<section>
+  <h2>🧪 Automated Testing</h2>
+  <div style="text-align:center; margin-bottom:.8em;">
+    <span style="font-size:2em; color:var(--accent2);">44 / 44</span>
+    <span style="font-size:.9em; color:#aaa;"> tests passing ✅</span>
+  </div>
+  <div class="two-col">
+    <div>
+      <h3>Unit Tests (28)</h3>
+      <table style="font-size:.72em;">
+        <tr><th>Class</th><th>What's Tested</th></tr>
+        <tr><td>CurrencyCalculationTests</td><td>USD→ZAR accuracy, rounding, edge cases</td></tr>
+        <tr><td>FileValidationTests</td><td>PDF validation, null/empty/wrong ext</td></tr>
+        <tr><td>ContractWorkflowTests</td><td>Status rules, SR eligibility</td></tr>
+        <tr><td>ModelTests</td><td>Default values, UTC dates</td></tr>
+      </table>
+      <div class="green-box" style="margin-top:.5em; font-size:.75em;">
+        Fully self-contained — no DB, no HTTP, no external dependencies
+      </div>
+    </div>
+    <div>
+      <h3>Integration Tests (16)</h3>
+      <table style="font-size:.72em;">
+        <tr><th>Class</th><th>Endpoints Tested</th></tr>
+        <tr><td>AuthIntegrationTests</td><td>Login 200/401</td></tr>
+        <tr><td>ClientsIntegrationTests</td><td>List, Get, Create, Delete</td></tr>
+        <tr><td>ContractsIntegrationTests</td><td>List, Get, Create, Patch</td></tr>
+        <tr><td>ServiceRequestsIntegrationTests</td><td>List, Get, Create</td></tr>
+      </table>
+      <div class="highlight-box" style="margin-top:.5em; font-size:.75em;">
+        Uses <code>WebApplicationFactory&lt;Program&gt;</code> + EF InMemory — boots the real API in-process
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 12 – INTEGRATION TEST DESIGN -->
+<section>
+  <h2>🔬 Integration Test Design</h2>
+  <h3>Key Engineering Decisions</h3>
+  <div style="display:flex; flex-direction:column; gap:.5em; font-size:.78em;">
+    <div class="highlight-box">
+      <b>1. Shared InMemoryDatabaseRoot</b><br/>
+      A single <code>static readonly InMemoryDatabaseRoot</code> is passed to <code>UseInMemoryDatabase</code>. Without this, each HTTP request scope got a brand-new empty database — data written in one request was invisible in the next.
+    </div>
+    <div class="highlight-box">
+      <b>2. Service Descriptor Removal</b><br/>
+      All EF Core descriptors involving <code>ApiDbContext</code> are removed from the DI container before registering InMemory, preventing the <em>"SqlServer + InMemory providers both registered"</em> runtime error.
+    </div>
+    <div class="highlight-box">
+      <b>3. EnableServiceProviderCaching(false)</b><br/>
+      Prevents EF from reusing a cached internal service provider that still holds SQL Server internals.
+    </div>
+    <div class="highlight-box">
+      <b>4. Testing Environment Guard</b><br/>
+      <code>ASPNETCORE_ENVIRONMENT=Testing</code> causes the API to skip <code>db.Database.Migrate()</code> on startup — migrations would fail against an InMemory store.
+    </div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 13 – CI/CD -->
+<section>
+  <h2>🔄 DevOps &amp; CI/CD</h2>
+  <h3>Why Automated Testing is Critical</h3>
+  <div class="two-col" style="margin-bottom:.6em;">
+    <div class="warn-box" style="font-size:.78em;">
+      <b>❌ Without Tests</b>
+      <ul style="margin:.3em 0;">
+        <li>Broken code deployed automatically</li>
+        <li>No way to detect regressions</li>
+        <li>Manual testing defeats CI/CD purpose</li>
+      </ul>
+    </div>
+    <div class="green-box" style="font-size:.78em;">
+      <b>✅ With Tests</b>
+      <ul style="margin:.3em 0;">
+        <li>Every push is verified instantly</li>
+        <li>API contract violations caught early</li>
+        <li>Only passing code reaches production</li>
+      </ul>
+    </div>
+  </div>
+  <div class="pipeline">
+    <div class="pipeline-step">1️⃣ &nbsp;<b>Build</b> — <code>dotnet build</code></div>
+    <div class="pipeline-arrow">↓</div>
+    <div class="pipeline-step">2️⃣ &nbsp;<b>Unit Tests</b> — business logic gates</div>
+    <div class="pipeline-arrow">↓</div>
+    <div class="pipeline-step">3️⃣ &nbsp;<b>Integration Tests</b> — API contract gates</div>
+    <div class="pipeline-arrow">↓</div>
+    <div class="pipeline-step">4️⃣ &nbsp;<b>Docker Build</b> — <code>docker compose build</code></div>
+    <div class="pipeline-arrow">↓</div>
+    <div class="pipeline-step">5️⃣ &nbsp;<b>Push Images</b> — to registry</div>
+    <div class="pipeline-arrow">↓</div>
+    <div class="pipeline-step">6️⃣ &nbsp;<b>Deploy</b> — staging → production</div>
+  </div>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 14 – CHALLENGES -->
+<section>
+  <h2>⚡ Challenges &amp; Solutions</h2>
+  <table style="font-size:.7em;">
+    <thead><tr><th>#</th><th>Challenge</th><th>Solution</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><b>SDK Glob Pollution</b><br/>Nested projects compiled into parent</td>
+        <td>Explicit <code>&lt;Compile Remove="GLMS.API\**"&gt;</code> rules in .csproj</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><b>EF Provider Conflict</b><br/>SqlServer + InMemory both registered</td>
+        <td>Remove all <code>ApiDbContext</code> descriptors before adding InMemory</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><b>InMemory DB Isolation</b><br/><code>Guid.NewGuid()</code> created new DB per request</td>
+        <td>Shared <code>InMemoryDatabaseRoot</code> across all scopes</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><b>Docker Cache Staleness</b><br/>Broken JSON baked into cached image layer</td>
+        <td><code>docker rmi</code> to delete images; force full rebuild</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><b>Docker Config in Local Debug</b><br/><code>appsettings.Docker.json</code> loaded unconditionally</td>
+        <td>ASP.NET Core auto-loads by environment name — removed manual call</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><b>401 on Every Request</b><br/>No login page, no session token</td>
+        <td>Added <code>AccountController</code>, <code>SessionAuthFilter</code>, login view</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ══════════════════════════════════════════════════════ SLIDE 15 – CONCLUSION -->
+<section>
+  <h2>✅ Deliverables &amp; Conclusion</h2>
+  <table style="font-size:.75em;">
+    <thead><tr><th>Deliverable</th><th>Status</th></tr></thead>
+    <tbody>
+      <tr><td>Web API backend (GLMS.API) — JWT, Swagger, EF Core, SQL Server</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>MVC frontend refactored to thin HTTP client (no direct DB access)</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>JWT session authentication — login, logout, session guard filter</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>Multi-stage Dockerfiles for API and Web App</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>Docker Compose — 3 containers with health checks &amp; internal networking</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>Environment-specific config — local vs Docker (auto-loaded by ASP.NET)</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>Automated test suite — 44 tests, <b>44 / 44 passing</b></td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+      <tr><td>Full source code, Dockerfiles, Compose file on GitHub</td><td><span class="badge badge-green">✅ Complete</span></td></tr>
+    </tbody>
+  </table>
+  <br/>
+  <div class="highlight-box" style="text-align:center; font-size:.82em;">
+    The full stack starts with a single command: &nbsp; <code>docker compose up --build</code>
+    <br/><br/>
+    <a href="https://github.com/cjmasopoga/GlobalLogisticsManagementSystem" style="color:var(--accent);">
+      github.com/cjmasopoga/GlobalLogisticsManagementSystem
+    </a>
+  </div>
+</section>
+
+</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/5.1.0/reveal.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script>
+  Reveal.initialize({
+    hash: true,
+    slideNumber: 'c/t',
+    transition: 'slide',
+    backgroundTransition: 'fade',
+    controls: true,
+    progress: true,
+    center: true,
+    plugins: []
+  });
+  hljs.highlightAll();
+</script>
+</body>
+</html>
