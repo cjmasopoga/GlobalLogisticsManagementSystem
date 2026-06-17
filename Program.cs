@@ -1,3 +1,4 @@
+using Global_Logistics_Management_System.Filters;
 using Global_Logistics_Management_System.Services;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,7 +10,10 @@ if (builder.Environment.IsEnvironment("Docker"))
         reloadOnChange: false);
 }
 
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+    options.Filters.Add<SessionAuthFilter>();
+});
 
 // Session (stores JWT token)
 builder.Services.AddDistributedMemoryCache();

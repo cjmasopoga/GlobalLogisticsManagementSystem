@@ -1,5 +1,8 @@
 namespace Global_Logistics_Management_System.Models.Api
 {
+    public record LoginDto(string Username, string Password);
+    public record TokenDto(string Token, string Username);
+
     public record ClientDto(int Id, string Name, string ContactDetails, string Region, int ContractCount);
     public record CreateClientDto(string Name, string ContactDetails, string Region);
 

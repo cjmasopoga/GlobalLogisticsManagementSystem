@@ -32,6 +32,20 @@ namespace Global_Logistics_Management_System.Services
                     new AuthenticationHeaderValue("Bearer", token);
         }
 
+        // ── Auth ─────────────────────────────────────────────────────────────
+
+        public async Task<TokenDto?> LoginAsync(string username, string password)
+        {
+            var resp = await _http.PostAsync("api/auth/login",
+                new StringContent(
+                    JsonSerializer.Serialize(new LoginDto(username, password)),
+                    Encoding.UTF8, "application/json"));
+
+            if (!resp.IsSuccessStatusCode) return null;
+            return JsonSerializer.Deserialize<TokenDto>(
+                await resp.Content.ReadAsStringAsync(), _json);
+        }
+
         // ── Clients ─────────────────────────────────────────────────────────
 
         public async Task<List<ClientDto>> GetClientsAsync()
