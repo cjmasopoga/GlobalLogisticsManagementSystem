@@ -1,0 +1,14 @@
+[
+  {
+	"Name": "GLMS.API",
+	"Project": "GLMS.API\\GLMS.API.csproj",
+	"Action": "Start",
+	"DebugTarget": "http"
+  },
+  {
+	"Name": "Global Logistics Management System",
+	"Project": "Global Logistics Management System.csproj",
+	"Action": "Start",
+	"DebugTarget": "http"
+  }
+]
