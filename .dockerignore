@@ -1,0 +1,15 @@
+## Build artefacts
+**/bin/
+**/obj/
+
+## Git
+.git/
+.gitignore
+
+## IDE / OS
+.vs/
+*.user
+.DS_Store
+
+## Test project (not needed inside any image)
+GLMS.Tests/

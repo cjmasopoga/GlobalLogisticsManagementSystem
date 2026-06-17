@@ -2,12 +2,13 @@
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
-# Copy solution and project files first for layer-cached restore
-COPY ["Global Logistics Management System.csproj", "Global Logistics Management System/"]
-RUN dotnet restore "Global Logistics Management System/Global Logistics Management System.csproj"
+# Copy project file first for layer-cached restore
+COPY ["Global Logistics Management System.csproj", "Web/"]
+RUN dotnet restore "Web/Global Logistics Management System.csproj"
 
-COPY . "Global Logistics Management System/"
-WORKDIR "/src/Global Logistics Management System"
+# Copy the rest of the MVC source
+COPY . "Web/"
+WORKDIR "/src/Web"
 RUN dotnet publish "Global Logistics Management System.csproj" -c Release -o /app/publish
 
 # ── Runtime stage ─────────────────────────────────────────────────────────────
